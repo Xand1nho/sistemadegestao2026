@@ -10,10 +10,6 @@ export interface CursoData{
     uptadeAt: Date; 
 }
 
-export interface Curso extends AlunoData{
-    professor: any;
-    cargaHoraria: any;
-    descricao: any;
-    nome: any;
+export interface Curso extends CursoData{
     alunos: AlunoData[];
 }

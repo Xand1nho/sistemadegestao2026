@@ -64,13 +64,12 @@ export default function AlunoPage() {
 
 
                 {/* Botão Voltar Estilizado */}
-                <button 
-                    onClick={() => window.history.back()} 
+                <Link href="/aluno"
                     className="w-full mt-4 py-4 rounded-2xl bg-zinc-800/50 text-zinc-400 font-bold flex items-center justify-center gap-3 transition-all duration-300 border border-zinc-700/50 hover:bg-linear-to-r hover:from-orange-500 hover:to-rose-600 hover:text-white hover:border-transparent hover:shadow-lg hover:shadow-orange-500/20 group/btn"
                 >
                     <span className="group-hover/btn:-translate-x-2 transition-transform duration-300">←</span> 
                     Voltar para lista
-                </button>
+                </Link>
             </div>
         </div>
     </div>
