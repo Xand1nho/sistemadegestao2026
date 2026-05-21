@@ -9,7 +9,7 @@ import { useState } from "react";
 interface Props {
     id: number;
     nome: string;
-    professor: string;
+    professor?: string;
     cargaHoraria: number;
     descricao: string;
 
