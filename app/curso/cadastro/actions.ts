@@ -24,7 +24,6 @@ export async function CreateCurso(curso: CreateCurso) {
     body: JSON.stringify(curso),
   });
 
-  const data = await response.json();
 
   if (response.status === 201) {
     revalidateTag("listar", "max");
@@ -34,5 +33,11 @@ export async function CreateCurso(curso: CreateCurso) {
     redirect("/login");
   }
 
-  return data;
+  try {
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return "Erro ao cadastrar o curso";
+  }
 }

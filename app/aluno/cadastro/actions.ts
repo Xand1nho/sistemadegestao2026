@@ -1,38 +1,44 @@
-"use server";
+import { prisma } from '../config/prisma';
 
-import { revalidateTag } from "next/cache";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
-interface CreateAluno {
-  name: string;
-  idade: number;
-  cpf: number;
+interface CriarUsuarioRequest {
+  nome: string; 
   email: string;
+  senha: string;
+  cargo: string;
 }
 
-export async function createAluno(aluno: CreateAluno) {
-  const cookiesStore = await cookies();
-  const token = cookiesStore.get("access_token")?.value;
+class CriarUsuarioService {
+  async execute({ nome, email, senha, cargo }: CriarUsuarioRequest) {
+    if (!nome || !email || !senha || !cargo) {
+      throw new Error("Todos os campos (nome, email, senha, cargo) são obrigatórios.");
+    }
 
-  const response = await fetch("http://localhost:8080/alunos", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(aluno),
-  });
+    const usuarioExiste = await prisma.usuario.findUnique({
+      where: { email }
+    });
 
-  const data = await response.json();
+    if (usuarioExiste) {
+      throw new Error("Este e-mail já está cadastrado no sistema.");
+    }
 
-  if (response.status === 201) {
-    revalidateTag("listar", "max");
-    return;
+    const usuario = await prisma.usuario.create({
+      data: {
+        nome,
+        email,
+        senha,
+        cargo
+      },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        cargo: true,
+        criadoEm: true
+      }
+    });
+
+    return usuario;
   }
-  if (response.status === 401) {
-    redirect("/login");
-  }
-
-  return data;
 }
+
+export { CriarUsuarioService };

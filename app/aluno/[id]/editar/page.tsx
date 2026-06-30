@@ -3,7 +3,7 @@
 import { Aluno } from "@/interfaces/alunos";
 import { useParams, useRouter } from "next/navigation";
 import { SubmitEvent, useEffect, useState } from "react";
-import { getAluno, updateAluno } from "../actions";
+import { getAluno, matriculas, updateAluno } from "../actions";
 import { Curso } from "@/interfaces/cursos";
 import { getCursos } from "@/app/cursos/actions";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
@@ -62,6 +62,17 @@ export default function AlunoPage() {
     function desmatricular(curso: Curso) {
         setMatriculado((oldState) => oldState.filter((c) => c.id !== curso.id));
         setNaoMatriculado((oldState) => [...oldState, curso]);
+    }
+
+    async function saveMatriculas() {
+        const response = await matriculas(Number(id), matriculado, naoMatriculado);
+
+
+        if(response){
+            alert(response);
+            return;
+        }
+        
     }
 
 
@@ -158,7 +169,7 @@ export default function AlunoPage() {
                                             <button onClick={() => matricular(curso)}>
                                                 <ArrowRightCircle />
                                             </button>
-                                            
+
                                         </li>
                                     ))}
 
@@ -186,7 +197,7 @@ export default function AlunoPage() {
 
 
                             </div>
-                            <button className="bg-black text-white rounded-xl px-10 py-2 cursor-pointer"> Salvar matrículas</button>
+                            <button className="bg-black text-white rounded-xl px-10 py-2 cursor-pointer" onClick={saveMatriculas}> Salvar matrículas</button>
 
                         </div>
                     </div>
